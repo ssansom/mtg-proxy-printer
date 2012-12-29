@@ -1,0 +1,1 @@
+import osfrom reportlab.lib.colors import black, white, blueROOT_PATH = os.path.dirname(os.path.abspath(__file__))IMAGES_FULL_PATH = "%s/downloaded_images" % ROOT_PATHDECKS_FULL_PATH = ROOT_PATHOUTPUT_PATH = "%s/pdfs" % ROOT_PATHPAGE_FILL_COLOR = blueCARD_HORIZONTAL_SPACING = 1CARD_VERTICAL_SPACING = 1CARD_WIDTH = 61CARD_HEIGHT = 86
