@@ -12,7 +12,6 @@ Write decks in UTF-8 to manage cards like Æther Vial
 import sys, math, os, re, urllib, codecs
 
 from reportlab.pdfgen.canvas import Canvas
-from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.units import mm
 import settings_default as settings
 
@@ -91,13 +90,9 @@ def print_pdf(deck, input_filename):
     CARD_HORIZONTAL_SPACING = settings.CARD_HORIZONTAL_SPACING
     CARD_VERTICAL_SPACING = settings.CARD_VERTICAL_SPACING
     
-    
-    padding_left = (LETTER[0] - 3*(CARD_WIDTH+(2*CARD_HORIZONTAL_SPACING))*mm) / 2
-    padding_bottom = (LETTER[1] - 3*(CARD_HEIGHT+(2*CARD_VERTICAL_SPACING))*mm) / 2
-#    padding_left = (A4[0] - 3*CARD_WIDTH*mm) / 2
-#    padding_bottom = (A4[1] - 3*CARD_HEIGHT*mm) / 2
-
-
+    padding_left = (settings.SCALED_PAGE[0] - (3*CARD_WIDTH + (4*CARD_HORIZONTAL_SPACING))*mm)/2
+    padding_bottom = (settings.SCALED_PAGE[1] - (3*CARD_HEIGHT)*mm)/2
+        
     def make_page(cards, canvas):
         canvas.translate(padding_left, padding_bottom)
         col, row = 0, 3
@@ -114,7 +109,7 @@ def print_pdf(deck, input_filename):
 
     output_filename = '%s_print.pdf' % input_filename[:-4]
     output_fullpath = os.path.join(settings.OUTPUT_PATH, output_filename)
-    canvas = Canvas(output_fullpath, pagesize=LETTER)
+    canvas = Canvas(output_fullpath, pagesize=settings.SCALED_PAGE)
 
     CARDS_ON_PAGE = 9
     def number_of_pages(deck):
@@ -123,7 +118,7 @@ def print_pdf(deck, input_filename):
     for index in range(number_of_pages(deck)):
         cards = deck[(index * CARDS_ON_PAGE):(index * CARDS_ON_PAGE + CARDS_ON_PAGE)]
         canvas.setFillColor(settings.PAGE_FILL_COLOR)
-        canvas.rect(x=0,y=0,width=215*mm,height=279*mm,fill=True)
+        canvas.rect(x=0,y=0,width=settings.SCALED_PAGE[0],height=settings.SCALED_PAGE[1],fill=True)
         make_page(cards, canvas)
     try:
         canvas.save()
@@ -137,7 +132,7 @@ def print_pdf(deck, input_filename):
     
     output_filename = '%s_overview.pdf' % input_filename[:-4]
     output_fullpath = os.path.join(settings.OUTPUT_PATH, output_filename)
-    canvas = Canvas(output_fullpath, pagesize=LETTER)
+    canvas = Canvas(output_fullpath, pagesize=settings.SCALED_PAGE)
     canvas.translate(padding_left, padding_bottom)
 
     #making list unique but maintain the order
